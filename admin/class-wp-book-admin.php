@@ -240,7 +240,7 @@ class Wp_Book_Admin {
 	}
 
 	/*______________ Save meta data to custom table ______________*/
-	
+
 	function register_custom_table()
 	{
 		global $wpdb;
@@ -282,4 +282,24 @@ class Wp_Book_Admin {
 		update_metadata('bookinfo',$post_id,'url_meta',$url);
 	}
 
+	/*______________create custom settings menu page ______________*/
+
+	function create_custom_settings_menu_page() {
+
+		//adding menupage in dashboard
+		//add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '',
+		// string $icon_url = '', int $position = null )
+		add_menu_page('Booksmenu','Booksmenu', 'manage_options','bookmenu','book_settings_html','dashicons-chart-pie',59);
+	}
+
+	//registering book settings
+
+	function register_book_settings() {
+
+		//register_setting( string $option_group, string $option_name, array $args = array() )
+		// option group is section in wp_options table where our $option_name data will be stored
+		register_setting('book-settings-group','book_currency');
+		register_setting('book-settings-group','book_no_per_page');
+
+	}
 }

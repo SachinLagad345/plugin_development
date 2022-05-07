@@ -176,6 +176,12 @@ class Wp_Book {
 		//hook for save meta data
 		$this->loader->add_action('save_post',$plugin_admin,'save_book_meta_data');
 
+		//hook for creating custom settings menu page in dashboard
+		$this->loader->add_action('admin_menu',$plugin_admin,'create_custom_settings_menu_page');
+
+		//hook for registering settings 
+		$this->loader->add_action('admin_init',$plugin_admin,'register_book_settings');
+
 	}
 
 	/**
