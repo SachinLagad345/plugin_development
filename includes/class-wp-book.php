@@ -169,7 +169,12 @@ class Wp_Book {
 		//hook for custom meta box
 		$this->loader->add_action( 'add_meta_boxes',$plugin_admin, 'wporg_add_custom_box' );
 
+		// hook for registering custom table to metadata api 
+		$this->loader->add_action( 'init', $plugin_admin, 'register_custom_table' );
+		$this->loader->add_action( 'switch_blog', $plugin_admin, 'register_custom_table' );
 
+		//hook for save meta data
+		$this->loader->add_action('save_post',$plugin_admin,'save_book_meta_data');
 
 	}
 

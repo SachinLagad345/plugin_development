@@ -30,7 +30,8 @@ class Wp_Book_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-book-admin.php';
+        Wp_Book_Admin::create_custom_table();
 	}
 
 }

@@ -11,9 +11,8 @@
  * @package    Wp_Book
  * @subpackage Wp_Book/admin/partials
  */
-?>
 
-<!-- This file should primarily consist of HTML with a little bit of PHP. -->
+// This file should primarily consist of HTML with a little bit of PHP.
 
 /*________________ Add custom meta box __________ */
 

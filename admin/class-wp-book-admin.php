@@ -211,4 +211,75 @@ class Wp_Book_Admin {
 		wporg_custom_box_html( $post_info );
 	}
 
+	/* ____________________ Create custom meta table _______________*/
+
+	static function create_custom_table()
+	{
+		global $wpdb;
+		$charset_collate = $wpdb->get_charset_collate();
+		$table_name = $wpdb->prefix . 'book_meta_data';
+
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
+			$query = "CREATE TABLE " . 
+				$table_name . "(
+				meta_id bigint(20) NOT NULL AUTO_INCREMENT,
+				bookinfo_id bigint(20) NOT NULL DEFAULT '0',
+				meta_key varchar(255) DEFAULT NULL,
+				meta_value longtext,
+				PRIMARY KEY  (meta_id),
+				KEY bookinfo_id (bookinfo_id),
+				KEY meta_key (meta_key)
+			)" . $charset_collate . ";";
+
+			// include file upgrade.php to execute query
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+			dbDelta($query);
+			}
+
+	}
+
+	/*______________ Save meta data to custom table ______________*/
+	
+	function register_custom_table()
+	{
+		global $wpdb;
+
+		//registered as metadata/metatype now only use bookinfo without meta suffix to update and get metadata
+		$wpdb->bookinfometa = $wpdb->prefix . 'book_meta_data';
+	}
+
+
+	function save_book_meta_data( $post_id) {
+		
+		if(! isset($_POST['save_book_meta_data_nonce']) ) {
+			return;
+		}
+
+		if(! wp_verify_nonce( $_POST['save_book_meta_data_nonce'], 'save_book_meta_data') )
+		{
+			return;
+		}
+
+		if( ! current_user_can('edit_post', $post_id) ) {
+			return;
+		}
+
+		$author_name = sanitize_text_field($_POST['author_name']);
+		$price = sanitize_text_field($_POST['price']);
+		$publisher = sanitize_text_field($_POST['publisher']);
+		$year = sanitize_text_field($_POST['year']);
+		$edition = sanitize_text_field($_POST['edition']);
+		$url = sanitize_text_field(esc_url($_POST['url']));
+
+		// metatype is registered/defined in register_custom_table
+		//update_metadata( string $meta_type, int $object_id, string $meta_key, mixed $meta_value, mixed $prev_value = '' )
+		update_metadata('bookinfo',$post_id,'author_name_meta',$author_name);
+		update_metadata('bookinfo',$post_id,'price_meta',$price);
+		update_metadata('bookinfo',$post_id,'publisher_meta',$publisher);
+		update_metadata('bookinfo',$post_id,'year_meta',$year);
+		update_metadata('bookinfo',$post_id,'edition_meta',$edition);
+		update_metadata('bookinfo',$post_id,'url_meta',$url);
+	}
+
 }
