@@ -166,6 +166,11 @@ class Wp_Book {
 		//hook for custom non hierarchical taxonomy
 		$this->loader->add_action( 'init', $plugin_admin,'wporg_register_taxonomy_books_tag' );
 
+		//hook for custom meta box
+		$this->loader->add_action( 'add_meta_boxes',$plugin_admin, 'wporg_add_custom_box' );
+
+
+
 	}
 
 	/**

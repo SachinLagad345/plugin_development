@@ -51,7 +51,7 @@ class Wp_Book_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
+		$this->my_function();
 	}
 
 	/**
@@ -99,6 +99,11 @@ class Wp_Book_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-book-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
+
+	private function my_function()
+	 {
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/wp-book-admin-display.php';
+	 }
 
 	/*_____________ Add custom post type ____________*/
 
@@ -167,6 +172,43 @@ class Wp_Book_Admin {
 			'rewrite'           => [ 'slug' => 'book-tag' ],
 		);
 		register_taxonomy( 'book tag', [ 'post','book' ], $args );
+	}
+
+	/*________________ Add custom meta box __________ */
+
+
+	function wporg_add_custom_box() {
+	        add_meta_box(
+	            'wporg_box_one',                 // Unique ID
+	            'Add info for Book',      // Box title
+	            array($this,'wporg_custom_box_html_callback'),  // Content callback, must be of type callable
+	            'book'                           // Post type
+	        );
+	}
+
+	function wporg_custom_box_html_callback( $post )
+	{
+		wp_nonce_field('save_book_meta_data','save_book_meta_data_nonce');
+
+		// using metatype defined in register_custom_table 
+		//get_metadata( string $meta_type, int $object_id, string $meta_key = '', bool $single = false )
+		$auth_name = get_metadata('bookinfo',$post->ID,'author_name_meta',true);
+		$price_val = get_metadata('bookinfo',$post->ID,'price_meta',true);
+		$publisher_val = get_metadata('bookinfo',$post->ID,'publisher_meta',true);
+		$year_val = get_metadata('bookinfo',$post->ID,'year_meta',true);
+		$edition_val = get_metadata('bookinfo',$post->ID,'edition_meta',true);
+		$url_val = get_metadata('bookinfo',$post->ID,'url_meta',true);
+
+		$post_info = array(
+				'author_name'=> $auth_name,
+				'price' => $price_val,
+				'publisher' => $publisher_val,
+				'year' => $year_val,
+				'edition' => $edition_val,
+				'url' => $url_val
+		);
+
+		wporg_custom_box_html( $post_info );
 	}
 
 }
