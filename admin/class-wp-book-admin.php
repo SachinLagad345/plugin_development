@@ -144,4 +144,29 @@ class Wp_Book_Admin {
 		register_taxonomy( 'book category',  array('post','book'), $args );
 	}
 
+	/*_____________ Add non-hierarchical custom taxonomy ____________*/
+
+	function wporg_register_taxonomy_books_tag() {
+		$labels = array(
+			'name'              => _x( 'Book Tags', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Book Tag', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Book Tag' ),
+			'all_items'         => __( 'All Book Tags' ),
+			'edit_item'         => __( 'Edit Book Tag' ),
+			'update_item'       => __( 'Update Book Tag' ),
+			'add_new_item'      => __( 'Add New Book Tag' ),
+			'new_item_name'     => __( 'New Book Tag Name' ),
+			'menu_name'         => __( 'Book Tag' ),
+		);
+		$args   = array(
+			'hierarchical'      => false, // make it hierarchical (like categories)
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'book-tag' ],
+		);
+		register_taxonomy( 'book tag', [ 'post','book' ], $args );
+	}
+
 }
