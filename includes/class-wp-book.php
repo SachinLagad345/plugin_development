@@ -182,6 +182,9 @@ class Wp_Book {
 		//hook for registering settings 
 		$this->loader->add_action('admin_init',$plugin_admin,'register_book_settings');
 
+		//hook for shortcode registration
+		$this->loader->add_action('init',$plugin_admin,'create_book_shortcode');
+
 	}
 
 	/**
