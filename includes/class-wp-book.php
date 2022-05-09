@@ -188,6 +188,9 @@ class Wp_Book {
 		// hook for registering widgets
 		$this->loader->add_action( 'widgets_init', $plugin_admin, 'book_widget_register' );
 
+		//hook for custom dashboard widget
+		$this->loader->add_action('wp_dashboard_setup',$plugin_admin,"register_book_dashboard_widget");
+
 	}
 
 	/**

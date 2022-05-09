@@ -373,4 +373,45 @@ class Wp_Book_Admin {
 		//registering widget
 		register_widget('my_wp_book_widget');
 	}
+
+	/*__________________Register dashboard widget ____________________________*/
+
+	public function register_book_dashboard_widget()
+	{
+		//wp_add_dashboard_widget( string $widget_id, string $widget_name, callable $callback, callable $control_callback = null, 
+		//array $callback_args = null, string $context = 'normal', string $priority = 'core' )
+		wp_add_dashboard_widget('wp_book_dashboard_widget','Book Dashboard Widget',array($this,'create_custom_dashboard_widget_callback'));
+	}
+
+	public function create_custom_dashboard_widget_callback()
+	{
+		global $wpdb;
+		$get_term_ids = $wpdb->get_col( "SELECT term_id FROM `wp_term_taxonomy` WHERE taxonomy = 'book category' ORDER BY count DESC LIMIT 5" );
+		$get_term_counts = $wpdb->get_col( "SELECT count FROM `wp_term_taxonomy` WHERE taxonomy = 'book category' ORDER BY count DESC LIMIT 5" );
+		$top_terms_names = array();
+		$top_terms_slugs = array();
+
+		// print_r($get_term_ids);
+
+		foreach($get_term_ids as $id)
+		{	
+			//echo $id;
+			$stored_terms = (array) $wpdb->get_row("SELECT name, slug FROM `wp_terms` WHERE term_id=" .$id);
+			//echo var_dump($stored_terms);
+			array_push($top_terms_names,$stored_terms['name']);
+			array_push($top_terms_slugs,$stored_terms['slug']);
+		}
+
+		?>
+
+		<ol>
+			<?php
+				for($i=0; $i < count($top_terms_names);$i++)
+				{
+					echo "<li style='font-size:20px'><a target='blank' href='" .get_site_url() ."/book-category/" .$top_terms_slugs[$i] ."'>" .$top_terms_names[$i] ." count= " .$get_term_counts[$i] ."</li>";
+				}
+			?>
+		</ol>
+	<?php
+	}
 }
