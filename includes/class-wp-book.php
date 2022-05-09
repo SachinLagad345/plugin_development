@@ -185,6 +185,9 @@ class Wp_Book {
 		//hook for shortcode registration
 		$this->loader->add_action('init',$plugin_admin,'create_book_shortcode');
 
+		// hook for registering widgets
+		$this->loader->add_action( 'widgets_init', $plugin_admin, 'book_widget_register' );
+
 	}
 
 	/**

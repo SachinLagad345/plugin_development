@@ -20,6 +20,14 @@
  * @subpackage Wp_Book/admin
  * @author     Sachin Lagad <sachin.lagad@hbwsl.com>
  */
+
+ /**
+ * includes
+ */
+ 
+// for widget class
+require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/widgets.php' );
+
 class Wp_Book_Admin {
 
 	/**
@@ -357,5 +365,12 @@ class Wp_Book_Admin {
 		}
 		echo "inside function";
 		return book_info_table($args_for_query);
+	}
+
+	// creating guitenberg book widget
+	function book_widget_register()
+	{
+		//registering widget
+		register_widget('my_wp_book_widget');
 	}
 }
