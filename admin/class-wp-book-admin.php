@@ -311,61 +311,6 @@ class Wp_Book_Admin {
 
 	}
 
-	/*____________ Create custom shortcode _________________*/
-
-	function create_book_shortcode()
-	{
-		add_shortcode('book',array($this,'create_book_shortcode_callback'));
-	}
-
-	function create_book_shortcode_callback($atts,$content=null)
-	{
-		$atts = shortcode_atts(
-				array(
-					'id' =>'',
-					'author_name' => '',
-					'year' => '',
-					'category' => '',
-					'tag' => '',
-					'publisher' =>''
-				), $atts);
-
-		$args_for_query = array(
-			'post_type' => 'book',
-			'post_status' => 'publish',
-			'posts_per_page' => get_option( 'book_no_per_page' ),
-			'author' => $atts['author_name']
-		);
-
-		if($atts['id']!='')
-		{
-			$args_for_query['id'] = $atts['id'];
-		}
-
-		if($atts['category']!='')
-		{
-			$args_for_query['tax_query'] = array(
-				array( 'taxonomy' => 'book category',
-				'terms' => array($atts['category']),
-				'field' => 'name',
-				'operator' => 'IN'
-				)
-			);
-		}
-
-		if($atts['tag']!='')
-		{
-			$args_for_query['tax_query'] = array(
-				array('taxonomy' => 'book tag',
-					'terms' => array($atts['tag']),
-					'field' => 'name',
-					'operator' => 'IN'
-				)
-			);
-		}
-		echo "inside function";
-		return book_info_table($args_for_query);
-	}
 
 	// creating guitenberg book widget
 	function book_widget_register()

@@ -182,9 +182,6 @@ class Wp_Book {
 		//hook for registering settings 
 		$this->loader->add_action('admin_init',$plugin_admin,'register_book_settings');
 
-		//hook for shortcode registration
-		$this->loader->add_action('init',$plugin_admin,'create_book_shortcode');
-
 		// hook for registering widgets
 		$this->loader->add_action( 'widgets_init', $plugin_admin, 'book_widget_register' );
 
@@ -206,6 +203,9 @@ class Wp_Book {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		//hook for shortcode registration
+		add_shortcode('book',array($plugin_public,'create_book_shortcode'));
 
 	}
 
